@@ -35,7 +35,9 @@ helpers(app);   // set view helpers for EJS
 //====== DB CONFIGURATION =======//
 //===============================//
 
-mongoose.connect('mongodb://localhost/database'); // connect to our database
+var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
+
+mongoose.connect(mongoUri); // connect to our database
 
 //===============================//
 //====== Env CONFIGURATION ======//
