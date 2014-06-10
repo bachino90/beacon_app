@@ -37,9 +37,9 @@ helpers(app);   // set view helpers for EJS
 
 var env = process.env.NODE_ENV || 'development';
 console.log(process.env.MONGOHQ_URL);
-var mongoUri = 'mongodb://heroku:-IY7qZns1g-mcGfYpV29JVjwjMmmYu_v5ITVPCW1gPQjCYakIOrrmq7z0lE3PelCJJj3GgCLkohxAB28LzWF5Q@kahana.mongohq.com:10092/app26226186';
+//var mongoUri = 'mongodb://heroku:-IY7qZns1g-mcGfYpV29JVjwjMmmYu_v5ITVPCW1gPQjCYakIOrrmq7z0lE3PelCJJj3GgCLkohxAB28LzWF5Q@kahana.mongohq.com:10092/app26226186';
 //process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
-
+var mongoUri = process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
 mongoose.connect(mongoUri); // connect to our database
 
 //===============================//
