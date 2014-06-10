@@ -35,10 +35,8 @@ helpers(app);   // set view helpers for EJS
 //====== DB CONFIGURATION =======//
 //===============================//
 
-var env = process.env.NODE_ENV || 'development';
 console.log(process.env.MONGOHQ_URL);
-//var mongoUri = 'mongodb://heroku:-IY7qZns1g-mcGfYpV29JVjwjMmmYu_v5ITVPCW1gPQjCYakIOrrmq7z0lE3PelCJJj3GgCLkohxAB28LzWF5Q@kahana.mongohq.com:10092/app26226186';
-//process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
+//'mongodb://heroku:-IY7qZns1g-mcGfYpV29JVjwjMmmYu_v5ITVPCW1gPQjCYakIOrrmq7z0lE3PelCJJj3GgCLkohxAB28LzWF5Q@kahana.mongohq.com:10092/app26226186';
 var mongoUri = process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
 mongoose.connect(mongoUri); // connect to our database
 
@@ -83,6 +81,6 @@ app.use('/api/v1/beacons', beacons_api_controller);
 //===============================//
 //===== Server CONFIGURATION ====//
 //===============================//
-
-app.listen(8080);
+var port = Number(process.env.PORT || 5000);
+app.listen(port);
 console.log('Magic happens on port 8080'); 			// shoutout to the user
