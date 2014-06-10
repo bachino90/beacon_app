@@ -1,0 +1,22 @@
+<% include layout %>
+<body>
+<h1>Add a new Beacon</h1>
+
+<%- link_to('Back','/beacons') %>
+
+<form action="/beacons" method="post">
+  <label for="uuid">UUID:</label><br>
+  <input type="text" name="uuid" id="uuid"><br>
+  <label for="major_id">Mayor ID:</label><br>
+  <input type="text" name="major_id" id="major_id"><br>
+  <label for="minor_id">Minor ID:</label><br>
+  <input type="text" name="minor_id" id="minor_id"><br>
+  <label for="content">Content:</label><br>
+  <textarea name="content" id="content"></textarea><br>
+  <input type="submit" value="Add New Beacon" />
+</form>
+
+<a href='/beacons'>Back</a>
+
+</body>
+</html>
