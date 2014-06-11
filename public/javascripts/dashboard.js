@@ -7,6 +7,16 @@ $(function() {
     $('#show_beacon_major_id').text(this.children[1].textContent);
     $('#show_beacon_minor_id').text(this.children[2].textContent);
     $('#show_beacon_content').text(this.children[3].textContent);
+
+    $('#uuid_update > input').val(this.children[0].textContent);
+    $('#major_id_update > input').val(this.children[1].textContent);
+    $('#minor_id_update > input').val(this.children[2].textContent);
+    $('#content_update > textarea').text(this.children[3].textContent);
+    var action = 'beacons/'+this.id;
+    $('#updateBeaconForm').attr('action',action);
+    $('#updateBeacon').click(function (){
+      $('#updateBeaconModal').modal();
+    });
   });
 });
 

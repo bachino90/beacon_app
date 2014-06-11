@@ -77,7 +77,7 @@ router.get('/:beacon_id', isLoggedIn, function(req, res) {
     });
 });
 
-/*
+
 // PUT /beacons/:beacon_id
 router.put('/:beacon_id',function(req, res) {
 
@@ -97,13 +97,12 @@ router.put('/:beacon_id',function(req, res) {
         if (err)
           res.send(err);
 
-        res.json({ message: 'Beacon updated!' });
+        res.redirect('/beacons');
       });
 
     });
 });
 
-*/
 
 // DELETE /beacons/:beacon_id
 router.delete('/:beacon_id', isLoggedIn, function(req, res) {

@@ -19,7 +19,7 @@ function isNOTLoggedIn(req, res, next) {
 
 function correctAnswer(req, res, next) {
   if (req.body.answer != 'karlo') {
-    res.render('signup', { title: 'Sign up',  message: req.flash({signupMessage: 'That answer is wrong.'}) });
+    res.render('signup', { title: 'Sign up',  message: "That's a wrong code." });
   } else {
     return next();
   }
