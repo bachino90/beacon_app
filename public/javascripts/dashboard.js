@@ -24,7 +24,7 @@ function enableAddButton() {
   if ($('#uuid').attr("class") == 'input-group has-error' || $('#uuid').attr("class") == 'input-group' ||
       $('#minor_id').attr("class") == 'input-group has-error' || $('#minor_id').attr("class") == 'input-group' ||
       $('#major_id').attr("class") == 'input-group has-error' || $('#major_id').attr("class") == 'input-group') {
-    $('#addNewBeaconButton').prop('disabled', true);
+    $('#addNewBeaconButton').prop('disabled', false);
   } else {
     $('#addNewBeaconButton').prop('disabled', false);
   }

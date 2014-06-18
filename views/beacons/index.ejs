@@ -57,6 +57,9 @@
           <% if (message.length > 0) { %>
             <div class="alert alert-danger"><%= message %></div>
           <% } %>
+          <% for(var error in valErr['errors']) { %>
+            <div class="alert alert-danger"><%= valErr['errors'][error].message %></div>
+          <% } %>
           <div class="input-group" id='uuid' style="margin-bottom:20px">
             <span class="input-group-addon">UUID  </span>
             <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>
@@ -101,9 +104,7 @@
         <input name="_method" value="PUT" type="hidden">
         <div class="modal-body">
           <!-- show any messages that come back with authentication -->
-          <% if (message.length > 0) { %>
-            <div class="alert alert-danger"><%= message %></div>
-          <% } %>
+
           <div class="input-group" id='uuid_update' style="margin-bottom:20px">
             <span class="input-group-addon">UUID  </span>
             <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>

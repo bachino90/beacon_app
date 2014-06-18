@@ -16,28 +16,27 @@ function isLoggedIn(req, res, next) {
   res.redirect('../');
 }
 
+function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
+  Beacon.find(function(err, b) {
+    if (err) {
+      res.render('error',{message: err.message,
+                          error: err});
+    }
+    for (var error in vE['errors']) {
+      console.log(vE['errors'][error].message);
+    }
+    res.render('beacons/index',{beacons: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
+  });
+}
+
 // GET /beacons
 router.get('/', isLoggedIn, function(req, res) {
-    Beacon.find(function(err, beacons) {
-      if (err) {
-        res.render('error',{message: err.message,
-                              error: err});
-      }
-
-      res.render('beacons/index',{beacons: beacons, routeNew: false, message: ""});
-    });
+  redirectToHomeWithErrors(req,res,false,'',false);
 });
 
 // GET /beacons/new
 router.get('/new', isLoggedIn, function(req, res) {
-    Beacon.find(function(err, beacons) {
-      if (err) {
-        res.render('error',{message: err.message,
-                              error: err});
-      }
-
-      res.render('beacons/index',{beacons: beacons, routeNew: true, message: ""});
-    });
+  redirectToHomeWithErrors(req,res,true,'',false);
 });
 
 // POST /beacons
@@ -46,23 +45,30 @@ router.post('/', isLoggedIn, function(req, res) {
     var beacon = new Beacon({
       uuid: req.body.uuid,
       major_id: req.body.major_id,
-      minor_id: req.body.minor_id,
-      content: req.body.content
+      minor_id: req.body.minor_id
     });
-    // create a new instance of the Beacon model
-    //beacon.uuid = req.body.uuid;
-    //beacon.major_id = req.body.major_id;
-    //beacon.minor_id = req.body.minor_id;
-    //beacon.content = req.body.content;
 
-    // save the Beacon and check for errors
-    beacon.save(function(err) {
+    var unique = Beacon.findOne({
+      uuid: req.body.uuid,
+      major_id: req.body.major_id,
+      minor_id: req.body.minor_id
+    },function(err, beacon2) {
       if (err)
-        res.send(err);//res.redirect('/beacons/index',{message: err, routeNew: true});//
+        res.send(err);
 
-      res.redirect('/beacons');
+      if (beacon2) {
+        console.log('Alredy exist');
+        redirectToHomeWithErrors(req,res,true,'This beacon already exists',false);
+      } else {
+        beacon.content = req.body.content;
+        beacon.save(function(err) {
+          if (err)
+            redirectToHomeWithErrors(req,res,true,'',err);
+          else
+            res.redirect('/beacons');
+        });
+      }
     });
-
 });
 
 // GET /beacons/:beacon_id
@@ -92,7 +98,7 @@ router.put('/:beacon_id',function(req, res) {
       beacon.minor_id = req.body.minor_id;
       beacon.content = req.body.content; 	// update the beacon info
 
-      // save the bear
+      // save the beacon
       beacon.save(function(err) {
         if (err)
           res.send(err);

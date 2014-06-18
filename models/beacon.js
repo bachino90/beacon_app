@@ -5,13 +5,19 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
+var UUIDmatch = [ /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid UUID format" ];
+var mini = [0, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'];
+var maxi = [65535, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MAX}).'];
+
 var BeaconSchema = new Schema({
-	uuid: String,
-  major_id: { type: Number, min: 0, max: 65535 },
-  minor_id: { type: Number, min: 0, max: 65535 },
+	uuid: { type:String, required: 'UUID is required!', match: UUIDmatch, uppercase: true },
+  major_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' },
+  minor_id: { type: Number, min: mini, max: maxi,  required: 'Minor ID is required!' },
+	content_url: String,
   content: String
 });
 
+/*
 BeaconSchema.path('uuid').validate(function (value) {
   return /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value);
 }, 'Invalid UUID format');
@@ -23,5 +29,6 @@ BeaconSchema.path('major_id').validate(function (value) {
 BeaconSchema.path('minor_id').validate(function (value) {
 	return (value<=65535 && value>=0);
 }, 'The Minor ID must be between 0 and 65535');
+*/
 
 module.exports = mongoose.model('Beacon', BeaconSchema);
