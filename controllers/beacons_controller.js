@@ -22,8 +22,9 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
       res.render('error',{message: err.message,
                           error: err});
     }
-    for (var error in vE['errors']) {
-      console.log(vE['errors'][error].message);
+    console.log(vE);
+    if (vE['code'] == 11000) {
+      m = "Already exist";
     }
     res.render('beacons/index',{beacons: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
   });
@@ -47,7 +48,7 @@ router.post('/', isLoggedIn, function(req, res) {
       major_id: req.body.major_id,
       minor_id: req.body.minor_id
     });
-
+/*
     var unique = Beacon.findOne({
       uuid: req.body.uuid,
       major_id: req.body.major_id,
@@ -60,6 +61,7 @@ router.post('/', isLoggedIn, function(req, res) {
         console.log('Alredy exist');
         redirectToHomeWithErrors(req,res,true,'This beacon already exists',false);
       } else {
+      */
         beacon.content = req.body.content;
         beacon.save(function(err) {
           if (err)
@@ -67,8 +69,8 @@ router.post('/', isLoggedIn, function(req, res) {
           else
             res.redirect('/beacons');
         });
-      }
-    });
+      //}
+    //});
 });
 
 // GET /beacons/:beacon_id
