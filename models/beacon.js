@@ -12,6 +12,7 @@ var uni = [true, 'Already exist'];
 
 var BeaconSchema = new Schema({
 	uuid: { type:String, required: 'UUID is required!', match: UUIDmatch, uppercase: true },
+	client_name: { type:String, uppercase: true },
   major_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' },
   minor_id: { type: Number, min: mini, max: maxi,  required: 'Minor ID is required!' },
 	full_uuid: { type: String, unique: uni, uppercase:true},

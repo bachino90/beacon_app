@@ -1,0 +1,37 @@
+<div class="modal fade" id="updateBeaconModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Update Beacon</h4>
+      </div>
+      <form id="updateBeaconForm" action="/beacons" method="post">
+        <input name="_method" value="PUT" type="hidden">
+        <div class="modal-body">
+          <!-- show any messages that come back with authentication -->
+
+          <div class="input-group" id='uuid_update' style="margin-bottom:20px">
+            <span class="input-group-addon">UUID  </span>
+            <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>
+          </div>
+          <div class="input-group" id='minor_id_update' style="margin-bottom:20px">
+            <span class="input-group-addon">Minor ID</span>
+            <input type="number" class="form-control" placeholder="1" name="minor_id">
+          </div>
+          <div class="input-group" id='major_id_update' style="margin-bottom:20px">
+            <span class="input-group-addon">Major ID</span>
+            <input type="number" class="form-control" placeholder="2" name="major_id">
+          </div>
+          <div class="input-group" id='content_update' style="margin-bottom:0px">
+            <span class="input-group-addon">Content</span>
+            <textarea class="form-control" rows="3" name="content"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Update" id='updateBeaconButton'/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
