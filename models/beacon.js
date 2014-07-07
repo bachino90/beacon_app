@@ -17,7 +17,8 @@ var BeaconSchema = new Schema({
   minor_id: { type: Number, min: mini, max: maxi,  required: 'Minor ID is required!' },
 	full_uuid: { type: String, unique: uni, uppercase:true},
 	content_url: String,
-  content: String
+  content: String,
+	client: Schema.ObjectId
 });
 
 BeaconSchema.pre('save', function(next) {

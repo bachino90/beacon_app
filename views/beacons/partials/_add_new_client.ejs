@@ -1,0 +1,30 @@
+<div class="modal fade" id="newClientModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Add New Client</h4>
+      </div>
+      <form id="newClientForm" action="/beacons/clients" method="post">
+        <div class="modal-body">
+          <div class="input-group" id='name' style="margin-bottom:20px">
+            <span class="input-group-addon">Name</span>
+            <input type="text" class="form-control" placeholder="Name" name="name">
+          </div>
+          <div class="input-group" id='primary_uuid' style="margin-bottom:20px">
+            <span class="input-group-addon">Primary UUID</span>
+            <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="primary_uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>
+          </div>
+          <div class="input-group" id='secondary_uuid' style="margin-bottom:20px">
+            <span class="input-group-addon">Secondary UUID</span>
+            <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="secondary_uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" class="btn btn-primary" value="Add" id='addNewClientButton'/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -14,6 +14,38 @@
           <% for(var error in valErr['errors']) { %>
             <div class="alert alert-danger"><%= valErr['errors'][error].message %></div>
           <% } %>
+
+
+          <div class="input-group" id='uuidx' style="margin-bottom:20px">
+            <div class="col-md-4">
+              <label for="disabledTextInput">UUID - Cliente</label>
+              <select name="uuid" class="form-control">
+                <% for(var i=0; i<clients.length; i++) { %>
+                  <option value='<%= clients[i].primary_uuid %>'>1º - <%= clients[i].name %></option>
+                  <option value='<%= clients[i].secondary_uuid %>'>2º - <%= clients[i].name %></option>
+                <% } %>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="disabledTextInput">Major ID - Local</label>
+              <select name="uuid" class="form-control">
+                <% for(var i=0; i<clients.length; i++) { %>
+                  <option value='<%= clients[i].primary_uuid %>'>1º - <%= clients[i].name %></option>
+                  <option value='<%= clients[i].secondary_uuid %>'>2º - <%= clients[i].name %></option>
+                <% } %>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="disabledTextInput">Minor ID - Area</label>
+              <select name="uuid" class="form-control">
+                <% for(var i=0; i<clients.length; i++) { %>
+                  <option value='<%= clients[i].primary_uuid %>'>1º - <%= clients[i].name %></option>
+                  <option value='<%= clients[i].secondary_uuid %>'>2º - <%= clients[i].name %></option>
+                <% } %>
+              </select>
+            </div>
+          </div>
+
           <div class="input-group" id='uuid' style="margin-bottom:20px">
             <span class="input-group-addon">UUID  </span>
             <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>

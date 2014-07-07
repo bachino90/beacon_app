@@ -2,10 +2,11 @@
 //====== Beacon Controller ======//
 //===============================//
 
-var express  = require('express');
-var passport = require('passport');
-var router   = express.Router();
-var Beacon   = require('../models/beacon');
+var express        = require('express');
+var passport       = require('passport');
+var router         = express.Router();
+var Beacon         = require('../models/beacon');
+var BeaconClient   = require('../models/beacon_client');
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -16,17 +17,41 @@ function isLoggedIn(req, res, next) {
   res.redirect('../');
 }
 
+function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
+  console.log(c);
+  console.log(vE);
+  if (vE['code'] == 11000) {
+    m = "Already exist";
+  }
+  var title = "Beacons";
+  if (req.params.client_id) {
+  }
+  res.render('beacons/index',{title: title, clients: c, beacons: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
+}
+
 function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
-  Beacon.find(function(err, b) {
-    if (err) {
-      res.render('error',{message: err.message,
-                          error: err});
+  BeaconClient.find(function(err1, c) {
+    if (err1) {
+      res.render('error',{message: err1.message,
+                          error: err1});
     }
-    console.log(vE);
-    if (vE['code'] == 11000) {
-      m = "Already exist";
+    if (req.params.client_id) {
+      Beacon.findById(req.params.client_id, function(err,b) {
+        if (err) {
+          res.render('error',{message: err.message,
+                              error: err});
+        }
+        insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
+      });
+    } else {
+      Beacon.find(function(err, b) {
+        if (err) {
+          res.render('error',{message: err.message,
+                              error: err});
+        }
+        insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
+      });
     }
-    res.render('beacons/index',{beacons: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
   });
 }
 
@@ -35,9 +60,30 @@ router.get('/', isLoggedIn, function(req, res) {
   redirectToHomeWithErrors(req,res,false,'',false);
 });
 
+// GET /beacons/client_id
+router.get('/:client_id',isLoggedIn, function(req, res){
+  console.log(req.params.client_id);
+  redirectToHomeWithErrors(req,res,false,'',false);
+});
+
 // GET /beacons/new
 router.get('/new', isLoggedIn, function(req, res) {
   redirectToHomeWithErrors(req,res,true,'',false);
+});
+
+// POST /clients
+router.post('/clients', isLoggedIn, function(req,res) {
+  var new_client = new BeaconClient({
+    name: req.body.name,
+    primary_uuid: req.body.primary_uuid,
+    secondary_uuid: req.body.secondary_uuid
+  });
+  new_client.save(function(err) {
+    if(err)
+      res.render(err);
+
+    res.redirect('/beacons');
+  });
 });
 
 // POST /beacons
@@ -74,6 +120,7 @@ router.post('/', isLoggedIn, function(req, res) {
 });
 
 // GET /beacons/:beacon_id
+/*
 router.get('/:beacon_id', isLoggedIn, function(req, res) {
     Beacon.findOne({ 'uuid':req.params.beacon_id }, function(err, beacon) {
       if (err) {
@@ -84,6 +131,7 @@ router.get('/:beacon_id', isLoggedIn, function(req, res) {
       res.render('beacons/show',{beacon: beacon});
     });
 });
+*/
 
 
 // PUT /beacons/:beacon_id
