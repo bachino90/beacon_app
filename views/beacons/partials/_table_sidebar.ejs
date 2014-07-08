@@ -1,10 +1,7 @@
 <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
-    <li><a href="function(){}" data-toggle="modal" data-target="#newClientModal">Add new Client</a></li>
-  </ul>
-  <ul class="nav nav-sidebar">
-    <% for(var i=0; i<clients.length; i++) { %>
-      <li><a href="/beacons/<%= clients[i]._id %>"><%= clients[i].name %></a></li>
+    <% for(var i=0; i<clients_side.length; i++) { %>
+      <li><a href="/beacons/<%= clients_side[i]._id %>"><%= clients_side[i].name %></a></li>
     <% } %>
   </ul>
 </div>

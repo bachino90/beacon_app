@@ -5,8 +5,8 @@
 var express        = require('express');
 var passport       = require('passport');
 var router         = express.Router();
-var Beacon         = require('../models/beacon');
-var BeaconClient   = require('../models/beacon_client');
+var Beacon         = require('../models/beacon').Beacon;
+var BeaconClient   = require('../models/beacon').BeaconClient;
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -18,7 +18,6 @@ function isLoggedIn(req, res, next) {
 }
 
 function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
-  console.log(c);
   console.log(vE);
   if (vE['code'] == 11000) {
     m = "Already exist";
@@ -26,7 +25,7 @@ function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
   var title = "Beacons";
   if (req.params.client_id) {
   }
-  res.render('beacons/index',{title: title, clients: c, beacons: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
+  res.render('beacons/index',{title: title, clients_side: c, clients_main: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
 }
 
 function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
@@ -36,21 +35,17 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
                           error: err1});
     }
     if (req.params.client_id) {
-      Beacon.findById(req.params.client_id, function(err,b) {
+      BeaconClient.findById(req.params.client_id, function(err,client) {
         if (err) {
           res.render('error',{message: err.message,
                               error: err});
         }
+        b = [client];
         insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
       });
     } else {
-      Beacon.find(function(err, b) {
-        if (err) {
-          res.render('error',{message: err.message,
-                              error: err});
-        }
-        insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
-      });
+      b = c;
+      insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
     }
   });
 }
@@ -132,7 +127,6 @@ router.get('/:beacon_id', isLoggedIn, function(req, res) {
     });
 });
 */
-
 
 // PUT /beacons/:beacon_id
 router.put('/:beacon_id',function(req, res) {

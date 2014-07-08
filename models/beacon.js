@@ -4,6 +4,7 @@
 
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
+var relationship = require('mongoose-relationship');
 
 var UUIDmatch = [ /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/, "Invalid UUID format" ];
 var mini = [0, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'];
@@ -12,13 +13,13 @@ var uni = [true, 'Already exist'];
 
 var BeaconSchema = new Schema({
 	uuid: { type:String, required: 'UUID is required!', match: UUIDmatch, uppercase: true },
-	client_name: { type:String, uppercase: true },
   major_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' },
   minor_id: { type: Number, min: mini, max: maxi,  required: 'Minor ID is required!' },
 	full_uuid: { type: String, unique: uni, uppercase:true},
 	content_url: String,
   content: String,
-	client: Schema.ObjectId
+	client_name: { type:String, uppercase: true },
+	client: [{ type: Schema.Types.ObjectId, ref: "BeaconClient", childPath:'beacons' }]
 });
 
 BeaconSchema.pre('save', function(next) {
@@ -26,18 +27,21 @@ BeaconSchema.pre('save', function(next) {
 	next();
 });
 
-/*
-BeaconSchema.path('uuid').validate(function (value) {
-  return /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value);
-}, 'Invalid UUID format');
+BeaconSchema.plugin(relationship, { relationshipPathName:'client' });
 
-BeaconSchema.path('major_id').validate(function (value) {
-	return (value<=65535 && value>=0);
-}, 'The Major ID must be between 0 and 65535');
+module.exports.Beacon = mongoose.model('Beacon', BeaconSchema);
 
-BeaconSchema.path('minor_id').validate(function (value) {
-	return (value<=65535 && value>=0);
-}, 'The Minor ID must be between 0 and 65535');
-*/
+//===============================//
+//===== Beacon Client Model =====//
+//===============================//
 
-module.exports = mongoose.model('Beacon', BeaconSchema);
+var BeaconClientSchema = new Schema({
+	primary_uuid: { type:String, required: 'Primary UUID is required!', unique: uni, match: UUIDmatch, uppercase: true },
+	secondary_uuid: { type:String, uppercase: true },
+	name: { type: String, unique: uni, uppercase:true},
+	locals: Array,
+	areas: Array,
+	beacons: [{ type: Schema.Types.ObjectId, ref: 'Beacon' }]
+});
+
+module.exports.BeaconClient = mongoose.model('BeaconClient', BeaconClientSchema);

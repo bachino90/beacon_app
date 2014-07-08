@@ -54,6 +54,9 @@ router.post('/login', isNOTLoggedIn, passport.authenticate('local-login', {
 	failureFlash : true // allow flash messages
 }));
 
+router.get('/extream', function(req,res) {
+  res.render('beacons/extream');
+});
 
 // process the logout form
 router.get('/logout', function(req, res) {
