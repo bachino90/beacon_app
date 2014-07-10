@@ -1,9 +1,5 @@
 <% include layout %>
 <body>
-<script>
-  var jojo = <%= clients_main %>
-</script>
-
 <!-- Modal Add New Client -->
 <% include partials/_add_new_client %>
 <!-- Modal Show Beacon -->
@@ -12,6 +8,10 @@
 <% include partials/_add_new_beacon %>
 <!-- Modal Update Beacon -->
 <% include partials/_update_beacon %>
+<!-- Modal Update Client -->
+<% include partials/_show_client %>
+<!-- Modal Add Major and Minor ID -->
+<% include partials/_update_client %>
 <!-- Table -->
 <% include partials/_table %>
 </body>

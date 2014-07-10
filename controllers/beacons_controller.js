@@ -31,17 +31,19 @@ function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
 function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
   BeaconClient.find(function(err1, c) {
     if (err1) {
+      console.log('aca')
       res.render('error',{message: err1.message,
                           error: err1});
-    }
-    if (req.params.client_id) {
+    } else if (req.params.client_id) {
       BeaconClient.findById(req.params.client_id, function(err,client) {
         if (err) {
+          console.log('aca2')
           res.render('error',{message: err.message,
                               error: err});
+        } else {
+          b = [client];
+          insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
         }
-        b = [client];
-        insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
       });
     } else {
       b = c;

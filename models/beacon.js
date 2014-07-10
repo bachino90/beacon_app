@@ -18,7 +18,7 @@ var BeaconSchema = new Schema({
 	full_uuid: { type: String, unique: uni, uppercase:true},
 	content_url: String,
   content: String,
-	client_name: { type:String, uppercase: true },
+	client_name: { type:String },
 	client: [{ type: Schema.Types.ObjectId, ref: "BeaconClient", childPath:'beacons' }]
 });
 
@@ -37,8 +37,8 @@ module.exports.Beacon = mongoose.model('Beacon', BeaconSchema);
 
 var BeaconClientSchema = new Schema({
 	primary_uuid: { type:String, required: 'Primary UUID is required!', unique: uni, match: UUIDmatch, uppercase: true },
-	secondary_uuid: { type:String, uppercase: true },
-	name: { type: String, unique: uni, uppercase:true},
+	secondary_uuid: { type:String, required: 'Secondary UUID is required!', unique: uni, match: UUIDmatch, uppercase: true },
+	name: { type: String, unique: uni },
 	locals: Array,
 	areas: Array,
 	beacons: [{ type: Schema.Types.ObjectId, ref: 'Beacon' }]
