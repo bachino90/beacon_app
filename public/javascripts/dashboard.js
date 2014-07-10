@@ -37,6 +37,12 @@ $(document).ready(function() {
   $('#updateClient').click(function (){
     $('#updateClientModal').modal();
   });
+  $('#updateClientUUID').click(function (){
+    $('#updateClientUUIDModal').modal();
+  });
+  $('#updateClientMajorID').click(function (){
+    $('#updateClientMajorIDModal').modal();
+  });
 
   $('#uuid > input').keyup(function(){
     var text = this.value;

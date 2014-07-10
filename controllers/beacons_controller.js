@@ -36,8 +36,8 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
                           error: err1});
     } else if (req.params.client_id) {
       BeaconClient.findById(req.params.client_id, function(err,client) {
+        console.log(err);
         if (err) {
-          console.log('aca2')
           res.render('error',{message: err.message,
                               error: err});
         } else {
@@ -86,34 +86,33 @@ router.post('/clients', isLoggedIn, function(req,res) {
 // POST /beacons
 router.post('/', isLoggedIn, function(req, res) {
 
-    var beacon = new Beacon({
-      uuid: req.body.uuid,
-      major_id: req.body.major_id,
-      minor_id: req.body.minor_id
-    });
-/*
-    var unique = Beacon.findOne({
-      uuid: req.body.uuid,
-      major_id: req.body.major_id,
-      minor_id: req.body.minor_id
-    },function(err, beacon2) {
-      if (err)
-        res.send(err);
+  var beacon = new Beacon({
+    uuid: req.body.uuid,
+    major_id: req.body.major_id,
+    minor_id: req.body.minor_id
+  });
+  beacon.content = req.body.content;
+  beacon.save(function(err) {
+    if (err)
+      redirectToHomeWithErrors(req,res,true,'',err);
+    else
+      res.redirect('/beacons');
+  });
+});
 
-      if (beacon2) {
-        console.log('Alredy exist');
-        redirectToHomeWithErrors(req,res,true,'This beacon already exists',false);
-      } else {
-      */
-        beacon.content = req.body.content;
-        beacon.save(function(err) {
-          if (err)
-            redirectToHomeWithErrors(req,res,true,'',err);
-          else
-            res.redirect('/beacons');
-        });
-      //}
-    //});
+// POST /beacons/:client_id/stores
+router.post('/:client_id/stores',isLoggedIn,function(req,res) {
+  BeaconClient.findById(req.params.client_id, function(err,client) {
+    client.stores.push({ store_name: req.params.store_name, major_id: req.params.major_id });
+    client.save(function (err) {
+      console.log('1'+client);
+      if (!err) console.log('Success!');
+      else {
+        console.log('2'+client);
+        res.redirect('/beacons/'+req.params.client_id);
+      }
+    });
+  });
 });
 
 // GET /beacons/:beacon_id

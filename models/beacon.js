@@ -32,6 +32,28 @@ BeaconSchema.plugin(relationship, { relationshipPathName:'client' });
 module.exports.Beacon = mongoose.model('Beacon', BeaconSchema);
 
 //===============================//
+//========= Store Model =========//
+//===============================//
+
+var StoreSchema = new Schema({
+	store_name: { type:String, required: 'Name is required!'},
+	major_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' }
+});
+
+module.exports.Store = mongoose.model('Store', StoreSchema);
+
+//===============================//
+//========= Area Model ==========//
+//===============================//
+
+var AreaSchema = new Schema({
+	area_name: { type:String, required: 'Name is required!'},
+	minor_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' }
+});
+
+module.exports.Area = mongoose.model('Area', AreaSchema);
+
+//===============================//
 //===== Beacon Client Model =====//
 //===============================//
 
@@ -39,8 +61,8 @@ var BeaconClientSchema = new Schema({
 	primary_uuid: { type:String, required: 'Primary UUID is required!', unique: uni, match: UUIDmatch, uppercase: true },
 	secondary_uuid: { type:String, required: 'Secondary UUID is required!', unique: uni, match: UUIDmatch, uppercase: true },
 	name: { type: String, unique: uni },
-	locals: Array,
-	areas: Array,
+	stores: [StoreSchema],
+	areas: [AreaSchema],
 	beacons: [{ type: Schema.Types.ObjectId, ref: 'Beacon' }]
 });
 
