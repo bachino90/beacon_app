@@ -75,7 +75,7 @@ var beacons_controller = require('./controllers/beacons_controller');
 var beacons_api_controller = require('./controllers/api/v1/beacons_api_controller');
 
 app.use('', index_controller);
-app.use('/beacons', beacons_controller);
+app.use('/clients', beacons_controller);
 app.use('/api/v1/beacons', beacons_api_controller);
 
 //===============================//

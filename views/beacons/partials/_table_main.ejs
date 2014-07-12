@@ -14,7 +14,7 @@
             <td><%= clients_main[i].beacons[j].minor_id %></td>
             <td><%= clients_main[i].beacons[j].content %></td>
             <td>
-              <form action='beacons/<%= clients_main[i].beacons[j]._id %>' method='POST'>
+              <form action='clients/<%= clients_main[i]._id %>/beacons/<%= clients_main[i].beacons[j]._id %>' method='POST'>
                 <input name="_method" value="DELETE" type="hidden">
                 <input type="submit" class="btn btn-danger" value="Borrar" />
               </form>

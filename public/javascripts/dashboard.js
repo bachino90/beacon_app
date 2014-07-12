@@ -50,7 +50,8 @@ $(document).ready(function() {
   $('#newBeaconUUIDSelect').change(function () {
     $('#completeNewBeaconForm').text("");
     if (this.value != "0") {
-      var url = "/beacons/"+this.selectedOptions[0].id+"/storesareas";
+      var url = "/clients/"+this.selectedOptions[0].id+"/storesareas";
+      $('form#newBeaconForm').attr("action","/clients/"+this.selectedOptions[0].id+"/beacons");
       $.get(url,function(data) {
         var storeText = "";
         var areaText = "";

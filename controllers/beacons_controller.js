@@ -51,24 +51,24 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
   });
 }
 
-// GET /beacons
+// GET /clients
 router.get('/', isLoggedIn, function(req, res) {
   redirectToHomeWithErrors(req,res,false,'',false);
 });
 
-// GET /beacons/client_id
+// GET /clients/:client_id
 router.get('/:client_id',isLoggedIn, function(req, res){
   //console.log(req.params.client_id);
   redirectToHomeWithErrors(req,res,false,'',false);
 });
 
-// GET /beacons/new
+// GET /clients/new
 router.get('/new', isLoggedIn, function(req, res) {
   redirectToHomeWithErrors(req,res,true,'',false);
 });
 
 // POST /clients
-router.post('/clients', isLoggedIn, function(req,res) {
+router.post('/', isLoggedIn, function(req,res) {
   var new_client = new BeaconClient({
     name: req.body.name,
     primary_uuid: req.body.primary_uuid,
@@ -78,28 +78,29 @@ router.post('/clients', isLoggedIn, function(req,res) {
     if(err)
       res.render(err);
 
-    res.redirect('/beacons');
+    res.redirect('/clients');
   });
 });
 
-// POST /beacons
-router.post('/', isLoggedIn, function(req, res) {
+// POST /clients/:client_id/beacons
+router.post('/:client_id/beacons', isLoggedIn, function(req, res) {
 
   var beacon = new Beacon({
     uuid: req.body.uuid,
     major_id: req.body.major_id,
-    minor_id: req.body.minor_id
+    minor_id: req.body.minor_id,
+    client: req.params.client_id
   });
   beacon.content = req.body.content;
   beacon.save(function(err) {
     if (err)
       redirectToHomeWithErrors(req,res,true,'',err);
     else
-      res.redirect('/beacons');
+      res.redirect('/clients');
   });
 });
 
-// GET /beacons/:client_id/storesareas
+// GET /clients/:client_id/storesareas
 router.get('/:client_id/storesareas',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     if (err) console.log('Error: '+err);
@@ -112,54 +113,54 @@ router.get('/:client_id/storesareas',isLoggedIn,function(req,res) {
   });
 });
 
-// POST /beacons/:client_id/stores
+// POST /clients/:client_id/stores
 router.post('/:client_id/stores',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.stores.push({ store_name: req.body.store_name, major_id: req.body.major_id });
     client.save(function (err) {
       if (err) console.log('Error: '+err);
-      else res.redirect('/beacons/'+req.params.client_id);
+      else res.redirect('/clients/'+req.params.client_id);
     });
   });
 });
 
-// DELETE /beacons/:client_id/stores/:store_id
+// DELETE /clients/:client_id/stores/:store_id
 router.delete('/:client_id/stores/:store_id',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.stores.id(req.params.store_id).remove();
     client.save(function (err) {
       if (err) console.log('Error: '+err);
-      else res.redirect('/beacons/'+req.params.client_id);
+      else res.redirect('/clients/'+req.params.client_id);
     });
   });
 });
 
-// POST /beacons/:client_id/areas
+// POST /clients/:client_id/areas
 router.post('/:client_id/areas',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.areas.push({ area_name: req.body.area_name, minor_id: req.body.minor_id });
     client.save(function (err) {
       if (err) console.log('Error: '+err);
-      else res.redirect('/beacons/'+req.params.client_id);
+      else res.redirect('/clients/'+req.params.client_id);
     });
   });
 });
 
-// DELETE /beacons/:client_id/areas/:area_id
+// DELETE /clients/:client_id/areas/:area_id
 router.delete('/:client_id/areas/:area_id',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.areas.id(req.params.area_id).remove();
     client.save(function (err) {
       if (err) console.log('Error: '+err);
-      else res.redirect('/beacons/'+req.params.client_id);
+      else res.redirect('/clients/'+req.params.client_id);
     });
   });
 });
 
-// GET /beacons/:beacon_id
+// GET /clients/:client_id/beacons
 /*
-router.get('/:beacon_id', isLoggedIn, function(req, res) {
-    Beacon.findOne({ 'uuid':req.params.beacon_id }, function(err, beacon) {
+router.get('/:client_id/beacons', isLoggedIn, function(req, res) {
+    BeaconClient.findOne({ 'uuid':req.params.client_id }, function(err, beacon) {
       if (err) {
         res.render('error',{message: err.message,
                             error: err});
@@ -170,11 +171,11 @@ router.get('/:beacon_id', isLoggedIn, function(req, res) {
 });
 */
 
-// PUT /beacons/:beacon_id
-router.put('/:beacon_id',function(req, res) {
+// PUT /clients/:client_id
+router.put('/:client_id',function(req, res) {
 
     // use our bear model to find the bear we want
-    Beacon.findById(req.params.beacon_id, function(err, beacon) {
+    BeaconClient.findById(req.params.client_id, function(err, beacon) {
 
       if (err)
         res.send(err);
@@ -196,15 +197,25 @@ router.put('/:beacon_id',function(req, res) {
 });
 
 
-// DELETE /beacons/:beacon_id
-router.delete('/:beacon_id', isLoggedIn, function(req, res) {
-    Beacon.remove({ _id: req.params.beacon_id }, function(err, beacon_id) {
+// DELETE /clients/:client_id
+router.delete('/:client_id', isLoggedIn, function(req, res) {
+    BeaconClient.remove({ _id: req.params.client_id }, function(err, beacon_id) {
       if (err)
         res.send(err);
 
-      res.redirect('/beacons');
+      res.redirect('/clients');
     });
 });
 
+
+// DELETE /clients/:client_id/beacons/:beacon_id
+router.delete('/:client_id', isLoggedIn, function(req, res) {
+    BeaconClient.remove({ _id: req.params.client_id }, function(err, beacon_id) {
+      if (err)
+        res.send(err);
+
+      res.redirect('/clients');
+    });
+});
 
 module.exports = router;

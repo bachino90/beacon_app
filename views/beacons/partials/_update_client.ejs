@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Update Client UUID</h4>
       </div>
-      <form id="updateClientUUIDForm" action="/beacons/clients" method="post">
+      <form id="updateClientUUIDForm" action="/clients/<%= clients_main[0]._id %>" method="post">
         <div class="modal-body">
           <div class="input-group" id='primary_uuid' style="margin-bottom:20px">
             <span class="input-group-addon">Primary UUID</span>
@@ -33,7 +33,7 @@
         <h4 class="modal-title" id="myModalLabel">Update Client Stores</h4>
       </div>
       <div class="modal-body">
-        <form id="updateClientMajorIDForm" action="/beacons/<%= clients_main[0]._id %>/stores" method="post">
+        <form id="updateClientMajorIDForm" action="/clients/<%= clients_main[0]._id %>/stores" method="post">
           <div class="row" style="margin-bottom:20px">
             <div class="col-md-6">
               <div class="input-group" id='store_name' style="margin-bottom:20px">
@@ -68,7 +68,7 @@
                   <td><%= clients_main[0].stores[j].store_name %></td>
                   <td><%= clients_main[0].stores[j].major_id %></td>
                   <td>
-                    <form action='/beacons/<%= clients_main[0]._id %>/stores/<%= clients_main[0].stores[j]._id %>' method='POST'>
+                    <form action='/clients/<%= clients_main[0]._id %>/stores/<%= clients_main[0].stores[j]._id %>' method='POST'>
                       <input name="_method" value="DELETE" type="hidden">
                       <input type="submit" class="btn btn-danger" value="Borrar" />
                     </form>
@@ -94,7 +94,7 @@
         <h4 class="modal-title" id="myModalLabel">Update Client Stores</h4>
       </div>
       <div class="modal-body">
-        <form id="updateClientMinorIDForm" action="/beacons/<%= clients_main[0]._id %>/areas" method="post">
+        <form id="updateClientMinorIDForm" action="/clients/<%= clients_main[0]._id %>/areas" method="post">
           <div class="row" style="margin-bottom:20px">
             <div class="col-md-6">
               <div class="input-group" id='area_name' style="margin-bottom:20px">
@@ -129,7 +129,7 @@
                   <td><%= clients_main[0].areas[j].area_name %></td>
                   <td><%= clients_main[0].areas[j].minor_id %></td>
                   <td>
-                    <form action='/beacons/<%= clients_main[0]._id %>/areas/<%= clients_main[0].areas[j]._id %>' method='POST'>
+                    <form action='/clients/<%= clients_main[0]._id %>/areas/<%= clients_main[0].areas[j]._id %>' method='POST'>
                       <input name="_method" value="DELETE" type="hidden">
                       <input type="submit" class="btn btn-danger" value="Borrar" />
                     </form>

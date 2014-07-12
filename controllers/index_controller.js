@@ -11,7 +11,7 @@ function isNOTLoggedIn(req, res, next) {
 
   // if they are redirect them to the Beacon page
   if (req.isAuthenticated())
-    res.redirect('/beacons');
+    res.redirect('/clients');
 
   // if user is NOT authenticated in the session, carry on
   return next();
@@ -42,21 +42,17 @@ router.get('/signup', isNOTLoggedIn, function(req, res) {
 
 // process the signup form
 router.post('/signup', isNOTLoggedIn, correctAnswer, passport.authenticate('local-signup', {
-	successRedirect : '/beacons', // redirect to the secure profile section
+	successRedirect : '/clients', // redirect to the secure profile section
 	failureRedirect : '/signup', // redirect back to the signup page if there is an error
 	failureFlash : true // allow flash messages
 }));
 
 // process the login form
 router.post('/login', isNOTLoggedIn, passport.authenticate('local-login', {
-	successRedirect : '/beacons', // redirect to the secure profile section
+	successRedirect : '/clients', // redirect to the secure profile section
 	failureRedirect : '/login', // redirect back to the signup page if there is an error
 	failureFlash : true // allow flash messages
 }));
-
-router.get('/extream', function(req,res) {
-  res.render('beacons/extream');
-});
 
 // process the logout form
 router.get('/logout', function(req, res) {
