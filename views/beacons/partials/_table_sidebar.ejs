@@ -1,7 +1,11 @@
 <div class="col-sm-3 col-md-2 sidebar">
   <ul class="nav nav-sidebar">
     <% for(var i=0; i<clients_side.length; i++) { %>
-      <li><a href="/clients/<%= clients_side[i]._id %>"><%= clients_side[i].name %></a></li>
+      <% if (clients_side[i]._id == client_id) { %>
+        <li class='active'><a href="/clients/<%= clients_side[i]._id %>"><%= clients_side[i].name %></a></li>
+      <% } else { %>
+        <li><a href="/clients/<%= clients_side[i]._id %>"><%= clients_side[i].name %></a></li>
+      <% } %>
     <% } %>
   </ul>
 </div>

@@ -22,9 +22,12 @@ function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
     m = "Already exist";
   }
   var title = "Beacons";
+  var client_id = "";
   if (req.params.client_id) {
+    title = b[0].name;
+    client_id = req.params.client_id;
   }
-  res.render('beacons/index',{title: title, clients_side: c, clients_main: b, routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
+  res.render('beacons/index',{title: title, clients_side: c, clients_main: b, client_id: client_id,routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
 }
 
 function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
@@ -34,8 +37,7 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
                           error: err1});
     } else if (req.params.client_id) {
       //console.log(req.params.client_id)
-      BeaconClient.findById(req.params.client_id, function(err,client) {
-        console.log(client);
+      BeaconClient.findById(req.params.client_id).populate('beacons').exec(function(err,client) {
         if (err) {
           res.render('error',{message: err.message,
                               error: err});
