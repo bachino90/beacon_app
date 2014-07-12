@@ -14,50 +14,25 @@
           <% for(var error in valErr['errors']) { %>
             <div class="alert alert-danger"><%= valErr['errors'][error].message %></div>
           <% } %>
-
-
-          <div class="input-group" id='uuidx' style="margin-bottom:20px">
-            <div class="col-md-4">
+          <div class="row">
+            <div class="col-md-12" style="margin-bottom:20px">
               <label for="disabledTextInput">UUID - Cliente</label>
-              <select name="uuid" class="form-control">
+              <select name="uuid" class="form-control" id="newBeaconUUIDSelect">
+                <option value='0'>Choose a client</option>
                 <% for(var i=0; i<clients_side.length; i++) { %>
-                  <option value='<%= clients_side[i].primary_uuid %>'>1º - <%= clients_side[i].name %></option>
-                  <option value='<%= clients_side[i].secondary_uuid %>'>2º - <%= clients_side[i].name %></option>
+                  <% if (clients_side[i].stores.length > 0 && clients_side[i].areas.length > 0) { %>
+                  <option value='<%= clients_side[i].primary_uuid %>' id='<%= clients_side[i]._id %>'>1º - <%= clients_side[i].name %></option>
+                  <option value='<%= clients_side[i].secondary_uuid %>' id='<%= clients_side[i]._id %>'>2º - <%= clients_side[i].name %></option>
+                  <% } %>
                 <% } %>
               </select>
             </div>
-            <div class="col-md-4">
-              <label for="disabledTextInput">Major ID - Local</label>
-              <select name="uuid" class="form-control">
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label for="disabledTextInput">Minor ID - Area</label>
-              <select name="uuid" class="form-control">
-              </select>
-            </div>
           </div>
-
-          <div class="input-group" id='uuid' style="margin-bottom:20px">
-            <span class="input-group-addon">UUID  </span>
-            <input type="text" class="form-control" placeholder="12312312312-1231-2312-3123-123123123123" name="uuid" pattern="^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" required>
-          </div>
-          <div class="input-group" id='minor_id' style="margin-bottom:20px">
-            <span class="input-group-addon">Minor ID</span>
-            <input type="number" class="form-control" placeholder="1" name="minor_id">
-          </div>
-          <div class="input-group" id='major_id' style="margin-bottom:20px">
-            <span class="input-group-addon">Major ID</span>
-            <input type="number" class="form-control" placeholder="2" name="major_id">
-          </div>
-          <div class="input-group" id='content' style="margin-bottom:0px">
-            <span class="input-group-addon">Content</span>
-            <textarea class="form-control" rows="3" name="content"></textarea>
+          <div class="row" id="completeNewBeaconForm">
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <input type="submit" class="btn btn-primary" value="Add" id='addNewBeaconButton' disabled/>
         </div>
       </form>
     </div>

@@ -43,6 +43,45 @@ $(document).ready(function() {
   $('#updateClientMajorID').click(function (){
     $('#updateClientMajorIDModal').modal();
   });
+  $('#updateClientMinorID').click(function (){
+    $('#updateClientMinorIDModal').modal();
+  });
+
+  $('#newBeaconUUIDSelect').change(function () {
+    $('#completeNewBeaconForm').text("");
+    if (this.value != "0") {
+      var url = "/beacons/"+this.selectedOptions[0].id+"/storesareas";
+      $.get(url,function(data) {
+        var storeText = "";
+        var areaText = "";
+        for (var i=0; i<data.response.stores.length; i++) {
+          var store = data.response.stores[i];
+          storeText = storeText + "<option value='"+store.major_id+"'>"+store.store_name+"</option>";
+        }
+        for (var j=0; j<data.response.areas.length; j++) {
+          var area = data.response.areas[j];
+          areaText = areaText + "<option value='"+area.minor_id+"'>"+area.area_name+"</option>";
+        }
+        $('#completeNewBeaconForm').text("");
+        $('#completeNewBeaconForm').append("<div class='col-md-6' style='margin-bottom:20px'>"+
+          "<label for='disabledTextInput'>Major ID - Local</label>"+
+          "<select name='major_id' class='form-control' id='majorIDSelect'>"+storeText+
+          "</select></div>"+
+        "<div class='col-md-6' style='margin-bottom:20px'>"+
+          "<label for='disabledTextInput'>Minor ID - Area</label>"+
+          "<select name='minor_id' class='form-control' id='minorIDSelect'>"+areaText+
+          "</select></div>"+
+        "<div class='col-md-12' style='margin-bottom:20px'>"+
+          "<div class='input-group' id='content' style='margin-bottom:0px'>"+
+            "<span class='input-group-addon'>Content</span>"+
+            "<textarea class='form-control' rows='3' name='content'></textarea>"+
+          "</div></div>"+
+        "<div class='col-md-12'>"+
+          "<input type='submit' class='btn btn-primary btn-block' value='Add new Beacon' id='addNewBeaconButton'/>"+
+        "</div>");
+      }, "json");
+    }
+  });
 
   $('#uuid > input').keyup(function(){
     var text = this.value;
