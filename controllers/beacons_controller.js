@@ -98,7 +98,7 @@ router.post('/:client_id/beacons', isLoggedIn, function(req, res) {
     if (err)
       redirectToHomeWithErrors(req,res,true,'',err);
     else
-      res.redirect('/clients');
+      res.redirect('/clients/'+req.params.client_id);
   });
 });
 
