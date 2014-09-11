@@ -1,0 +1,22 @@
+Comando usados comunmente:
+
+De NODE:
+
+node app.js --> Arrancar el servidor
+
+De MONGO:
+
+show dbs
+use <nombre de la database>
+show collections
+db.<nombre de una coleccion>.find()
+db.dropDatabase()
+
+De GIT:
+
+git add .
+git commit -m "comentario"
+git push
+git push heroku master
+
+git pull

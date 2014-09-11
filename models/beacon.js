@@ -11,6 +11,10 @@ var mini = [0, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}
 var maxi = [65535, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MAX}).'];
 var uni = [true, 'Already exist'];
 
+//===============================//
+//======== Beacon Model =========//
+//===============================//
+
 var BeaconSchema = new Schema({
 	uuid: { type:String, required: 'UUID is required!', match: UUIDmatch, uppercase: true },
   major_id: { type: Number, min: mini, max: maxi,  required: 'Major ID is required!' },
