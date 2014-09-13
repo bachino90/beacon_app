@@ -91,25 +91,34 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Update Client Stores</h4>
+        <h4 class="modal-title" id="myModalLabel">Update Areas</h4>
       </div>
       <div class="modal-body">
         <form id="updateClientMinorIDForm" action="/clients/<%= clients_main[0]._id %>/areas" method="post">
           <div class="row" style="margin-bottom:20px">
+            <div class="col-md-12">
+              <label for="disabledTextInput">Store</label>
+              <select name="uuid" class="form-control" id="newBeaconUUIDSelect">
+                <option value='0'>Choose a store</option>
+                <% for(var i=0; i<clients_side[0].stores.length; i++) { %>
+                  <option value='<%= clients_side[0].stores[i].major_id %>' id='<%= clients_side[0].stores[i]._id %>'><%= clients_side.stores[i].store_name %></option>
+                <% } %>
+              </select>
+            </div>
             <div class="col-md-6">
               <div class="input-group" id='area_name' style="margin-bottom:20px">
-                <span class="input-group-addon">Store</span>
+                <span class="input-group-addon">Area</span>
                 <input type="text" class="form-control" placeholder="Area Name" name="area_name">
               </div>
             </div>
             <div class="col-md-6">
               <div class="input-group" id='minor_id' style="margin-bottom:20px">
-                <span class="input-group-addon">Major ID</span>
+                <span class="input-group-addon">Minor ID</span>
                 <input type="number" class="form-control" placeholder="1111" name="minor_id">
               </div>
             </div>
             <div class="col-md-12">
-              <input type="submit" class="btn btn-primary btn-block" value="Add Store - Major ID" id='updateClientMinorIDButton'/>
+              <input type="submit" class="btn btn-primary btn-block" value="Add Area - Minor ID" id='updateClientMinorIDButton'/>
             </div>
           </div>
         </form>

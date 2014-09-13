@@ -5,8 +5,11 @@
 var express        = require('express');
 var passport       = require('passport');
 var router         = express.Router();
+var Store          = require('../models/beacon').Store;
+var Area           = require('../models/beacon').Area;
 var Beacon         = require('../models/beacon').Beacon;
 var BeaconClient   = require('../models/beacon').BeaconClient;
+
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
@@ -46,7 +49,7 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
                           error: err1});
     } else if (req.params.client_id) {
       //console.log(req.params.client_id)
-      BeaconClient.findById(req.params.client_id).populate('beacons').exec(function(err,client) {
+      BeaconClient.findById(req.params.client_id).populate('beacons').populate('stores').exec(function(err,client) {
         if (err) {
           res.render('error',{message: err.message,
                               error: err});
@@ -61,15 +64,17 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
       b = c;
       insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
     }
-  });
+  }).populate('stores');
 }
 
 // GET /clients
+// Get all clients
 router.get('/', isLoggedIn, function(req, res) {
   redirectToHomeWithErrors(req,res,false,'',false);
 });
 
 // GET /clients/:client_id
+// Get client with client_id
 router.get('/:client_id',isLoggedIn, function(req, res){
   //console.log(req.params.client_id);
   redirectToHomeWithErrors(req,res,false,'',false);
@@ -81,6 +86,7 @@ router.get('/new', isLoggedIn, function(req, res) {
 });
 
 // POST /clients
+// Create a client
 router.post('/', isLoggedIn, function(req,res) {
   var new_client = new BeaconClient({
     name: req.body.name,
@@ -96,24 +102,36 @@ router.post('/', isLoggedIn, function(req,res) {
 });
 
 // POST /clients/:client_id/beacons
+// Create beacon for client_id
 router.post('/:client_id/beacons', isLoggedIn, function(req, res) {
-
-  var beacon = new Beacon({
-    uuid: req.body.uuid,
-    major_id: req.body.major_id,
-    minor_id: req.body.minor_id,
-    client: req.params.client_id
-  });
-  beacon.content = req.body.content;
-  beacon.save(function(err) {
-    if (err)
-      redirectToHomeWithErrors(req,res,true,'',err);
-    else
-      res.redirect('/clients/'+req.params.client_id);
+  BeaconClient.findById(req.params.client_id,function(err, client) {
+    var beacon = new Beacon({
+      uuid: req.body.uuid,
+      major_id: req.body.major_id,
+      minor_id: req.body.minor_id,
+      client: client._id //req.params.client_id
+    });
+    /*
+    beacon.store.store_name = ;
+    beacon.store.major_id = ;
+    beacon.store.location.latitude = ;
+    beacon.store.location.longitude = ;
+    beacon.area.area_name = ;
+    beacon.area.minor_id = ;
+    beacon.area.description = ;
+    */
+    beacon.content = req.body.content;
+    beacon.save(function(err) {
+      if (err)
+        redirectToHomeWithErrors(req,res,true,'',err);
+      else
+        res.redirect('/clients/'+req.params.client_id);
+    });
   });
 });
 
 // GET /clients/:client_id/storesareas
+// Get all store and areas for client_id
 router.get('/:client_id/storesareas',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     if (err) console.log('Error: '+err);
@@ -126,11 +144,28 @@ router.get('/:client_id/storesareas',isLoggedIn,function(req,res) {
   });
 });
 
+// GET /clients/:client_id/stores
+// Get all store for client_id
+router.get('/:client_id/stores',isLoggedIn,function(req,res) {
+  BeaconClient.findById(req.params.client_id).populate('stores').exec(function(err,client) {
+    if (err) console.log('Error: '+err);
+    else {
+      var response = new Object();
+      response.stores = client.stores;
+      res.json({ response: response });
+    }
+  });
+});
+
 // POST /clients/:client_id/stores
+// Create store for client_id
 router.post('/:client_id/stores',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
-    client.stores.push({ store_name: req.body.store_name, major_id: req.body.major_id });
-    client.save(function (err) {
+    var store = new Store();
+    store.store_name = req.body.store_name;
+    store.major_id = req.body.major_id;
+    store.client = client._id;
+    store.save(function (err) {
       if (err) console.log('Error: '+err);
       else res.redirect('/clients/'+req.params.client_id);
     });
@@ -138,6 +173,7 @@ router.post('/:client_id/stores',isLoggedIn,function(req,res) {
 });
 
 // DELETE /clients/:client_id/stores/:store_id
+// Delete store with store_id in client_id
 router.delete('/:client_id/stores/:store_id',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.stores.id(req.params.store_id).remove();
@@ -148,19 +184,28 @@ router.delete('/:client_id/stores/:store_id',isLoggedIn,function(req,res) {
   });
 });
 
-// POST /clients/:client_id/areas
-router.post('/:client_id/areas',isLoggedIn,function(req,res) {
+// POST /clients/:client_id/stores/:store_id/areas
+// Create Area for client_id
+router.post('/:client_id/stores/:store_id/areas',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
-    client.areas.push({ area_name: req.body.area_name, minor_id: req.body.minor_id });
-    client.save(function (err) {
-      if (err) console.log('Error: '+err);
-      else res.redirect('/clients/'+req.params.client_id);
+    store = client.stores.id(req.params.store_id);
+    store.areas.find({ minor_id: req.body.minor_id }, function(err, area){
+      if (area) {
+        console.log('ya existe un area con ese minor_id en este store :'+store.store_name);
+      } else {
+        store.areas.push({ area_name: req.body.area_name, minor_id: req.body.minor_id });
+        store.save(function (err) {
+          if (err) console.log('Error: '+err);
+          else res.redirect('/clients/'+req.params.client_id);
+        });
+      }
     });
   });
 });
 
-// DELETE /clients/:client_id/areas/:area_id
-router.delete('/:client_id/areas/:area_id',isLoggedIn,function(req,res) {
+// DELETE /clients/:client_id/stores/:store_id/areas/:area_id
+// Delete area with area_id in client_id
+router.delete('/:client_id/stores/:store_id/areas/:area_id',isLoggedIn,function(req,res) {
   BeaconClient.findById(req.params.client_id, function(err,client) {
     client.areas.id(req.params.area_id).remove();
     client.save(function (err) {
