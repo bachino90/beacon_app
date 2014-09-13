@@ -27,12 +27,21 @@ function insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c) {
     title = b[0].name;
     client_id = req.params.client_id;
   }
-  res.render('beacons/index',{title: title, clients_side: c, clients_main: b, client_id: client_id,routeNew: rN, message: m, valErr: vE, newBeacon: newB, showBeacon: showB});
+  res.render('beacons/index',{title: title,
+                       clients_side: c,
+                       clients_main: b,
+                          client_id: client_id,
+                           routeNew: rN,
+                            message: m,
+                             valErr: vE,
+                          newBeacon: newB,
+                         showBeacon: showB});
 }
 
 function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
   BeaconClient.find(function(err1, c) {
     if (err1) {
+      console.log('error al encontrar clientes en redirectToHomeWithError');
       res.render('error',{message: err1.message,
                           error: err1});
     } else if (req.params.client_id) {
@@ -47,6 +56,8 @@ function redirectToHomeWithErrors(req,res,rN,m,vE,newB,showB) {
         }
       });
     } else {
+      console.log('Encontro estos errores:');
+      console.log(c);
       b = c;
       insideRedirectToHome(req,res,rN,m,vE,newB,showB,b,c);
     }
